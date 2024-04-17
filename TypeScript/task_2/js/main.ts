@@ -45,11 +45,11 @@ function createEmployee(salary: number | string): Director | Teacher {
 	return new Director();
 }
 
-export function isDirector(employee: DirectorInterface | TeacherInterface): employee is DirectorInterface {
+function isDirector(employee: DirectorInterface | TeacherInterface): employee is DirectorInterface {
     return (employee as DirectorInterface).workDirectorTasks !== undefined;
 }
 
-export function executeWork(employee: DirectorInterface | TeacherInterface): string {
+function executeWork(employee: DirectorInterface | TeacherInterface): string {
     if(isDirector(employee)) {
         return employee.workDirectorTasks();
     } else {
@@ -57,5 +57,15 @@ export function executeWork(employee: DirectorInterface | TeacherInterface): str
     }
 }
 
-console.log(executeWork(createEmployee(200)));
-console.log(executeWork(createEmployee(1000)));
+type Subjects = 'Math' | 'History';
+
+function teachClass(todayClass: Subjects): string {
+    if (todayClass === 'Math') {
+        return 'Teaching Math'
+    } else if (todayClass === 'History') {
+        return 'Teaching History'
+    }
+}
+
+console.log(teachClass('Math'));
+console.log(teachClass('History'));
