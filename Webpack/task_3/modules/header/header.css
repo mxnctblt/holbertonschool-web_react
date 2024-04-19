@@ -1,0 +1,7 @@
+/* header.css */
+#logo {
+  background: url(../../assets/holberton-logo.jpg);
+  background-size: cover;
+  width: 200px;
+  height: 200px;
+}
