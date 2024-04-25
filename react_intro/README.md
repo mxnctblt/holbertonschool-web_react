@@ -160,3 +160,22 @@ Install and configure the various plugins to support:
 - style loader
 - css loader
 - image webpack loader
+
+### 9. Install Babel
+
+- Install Babel, and in task_5/dashboard/.babelrc, add the presets for preset-env and preset-react
+- Add a babel-loader to the Webpack configuration so you can support js and jsx files
+- Import the files that you wrote in the previous task. All the Javascript and React code should be within the src folder
+
+At this point, running webpack-dev-server should correctly execute your code, and you should be able to see the dashboard like in the last task
+
+### 10. Reorganize the files
+
+Let’s reorganize the files in our project:
+
+- Every file related to the App, should be within a App folder
+- Every file related to the Notifications, should be within a Notifications folder
+- Every file related to the utils functions, should be within a utils folder
+- Every asset file should be within the assets folder
+- Set up the favicon.ico in the dist folder
+- Webpack config file should be within a config folder if it isn’t already
