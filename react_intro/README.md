@@ -179,3 +179,9 @@ Let’s reorganize the files in our project:
 - Every asset file should be within the assets folder
 - Set up the favicon.ico in the dist folder
 - Webpack config file should be within a config folder if it isn’t already
+
+### 11. Testing
+
+Install Jest and Enzyme to run your test suites
+
+move the setupTests.js file to config folder if you have not already
