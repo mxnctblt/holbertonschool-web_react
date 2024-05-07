@@ -1,0 +1,12 @@
+th {
+  border-bottom: 1px rgb(178, 178, 178) solid;
+  text-align: left;
+}
+
+th:nth-child(1) {
+  text-align: center;
+}
+
+table {
+  border: 1px rgb(178, 178, 178) solid;
+}
