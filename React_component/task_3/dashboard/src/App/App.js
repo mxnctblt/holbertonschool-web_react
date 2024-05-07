@@ -7,6 +7,8 @@ import Login from '../Login/Login';
 import CourseList from '../CourseList/CourseList';
 import './App.css';
 import { getLatestNotifications } from '../utils/utils';
+import BodySectionWithMarginBottom from '../BodySection/BodySectionWithMarginBottom';
+import BodySection from '../BodySection/BodySection';
 
 const coursesData = [
   { id: 1, name: 'ES6', credit: 60 },
@@ -42,10 +44,26 @@ class App extends Component {
         <Notifications />
         <div className="App">
           <Header />
-          {!this.props.isLoggedIn ? <Login /> : <CourseList />}
+          {!this.props.isLoggedIn ? (
+            <BodySectionWithMarginBottom title="Log in to continue">
+              <Login />
+            </BodySectionWithMarginBottom>
+          ) : (
+            <BodySectionWithMarginBottom title="Course list">
+              <CourseList />
+            </BodySectionWithMarginBottom>
+          )}
+          <BodySection title="News from the School">
+            <p>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam
+              nec sem vel nulla tristique commodo. Nam consequat luctus elit,
+              eget feugiat velit ultrices quis. Integer ullamcorper, sapien sit
+              amet malesuada consequat, libero quam ultricies mi, eget lacinia
+              felis mauris sed ipsum.
+            </p>
+          </BodySection>
           <Footer />
         </div>
-        ;
       </>
     );
   }
