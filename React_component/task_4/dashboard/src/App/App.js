@@ -9,6 +9,7 @@ import './App.css';
 import { getLatestNotifications } from '../utils/utils';
 import BodySectionWithMarginBottom from '../BodySection/BodySectionWithMarginBottom';
 import BodySection from '../BodySection/BodySection';
+import WithLogging from '../HOC/WithLogging';
 
 const coursesData = [
   { id: 1, name: 'ES6', credit: 60 },
@@ -41,7 +42,9 @@ class App extends Component {
   render() {
     return (
       <>
-        <Notifications />
+        <WithLogging>
+          <Notifications />
+        </WithLogging>
         <div className="App">
           <Header />
           {!this.props.isLoggedIn ? (
