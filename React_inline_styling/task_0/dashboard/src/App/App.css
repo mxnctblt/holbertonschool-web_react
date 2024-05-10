@@ -1,36 +1,7 @@
-/* App.css */
 .App {
-  position: relative;
   min-height: 100vh;
-}
-
-/* Style for the header */
-.App-header {
   display: flex;
-  align-items: center;
-  border-bottom: 3px solid #e1484c;
-}
-
-.App-header h1 {
-  margin-left: 20px;
-  color: #e1484c;
-}
-
-/* Style for the body */
-.App-body {
-  margin: 50px 0 0 30px;
-}
-
-.App-body input {
-  margin-right: 10px;
-}
-
-/* Style for the footer */
-.App-footer {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  border-top: 3px solid #e1484c;
-  display: flex;
-  justify-content: center;
+  flex-direction: column;
+  justify-content: space-between;
+  font-family: Arial, Helvetica, sans-serif;
 }

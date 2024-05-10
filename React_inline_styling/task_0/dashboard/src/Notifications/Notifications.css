@@ -1,13 +1,19 @@
-/* style for Notifications */
+.menuItem {
+  position: absolute;
+  right: 10px;
+}
+
 .Notifications {
-    border: 2px dashed #e1484c;
-    padding: 10px;
+  position: absolute;
+  right: 10px;
+  top: 30px;
+  border: 1px red dashed;
+  padding: 1rem;
 }
 
-li[data-priority="default"] {
-	color: blue;
+[data-notification-type="default"] {
+  color: blue;
 }
-
-li[data-priority="urgent"] {
-	color: red;
+[data-notification-type="urgent"] {
+  color: red;
 }
