@@ -2,6 +2,10 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import CourseList from './CourseList';
 import CourseListRow from './CourseListRow';
+import { StyleSheetTestUtils } from 'aphrodite';
+
+
+StyleSheetTestUtils.suppressStyleInjection();
 
 describe('tests for CourseList component when passing no props', () => {
   let wrapper;

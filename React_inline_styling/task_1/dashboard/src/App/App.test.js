@@ -6,6 +6,10 @@ import Login from '../Login/Login';
 import Footer from '../Footer/Footer';
 import Header from '../Header/Header';
 import CourseList from '../CourseList/CourseList';
+import { StyleSheetTestUtils } from 'aphrodite';
+
+
+StyleSheetTestUtils.suppressStyleInjection();
 
 describe('tests for App component', () => {
   it('should render without crashing', () => {

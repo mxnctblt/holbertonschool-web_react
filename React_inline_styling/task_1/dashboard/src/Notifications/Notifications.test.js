@@ -2,6 +2,10 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import Notifications from './Notifications';
 import NotificationItem from './NotificationItem';
+import { StyleSheetTestUtils } from 'aphrodite';
+
+
+StyleSheetTestUtils.suppressStyleInjection();
 
 describe('Tests for Notifications componenet when no prop are passed', () => {
   let wrapper;
