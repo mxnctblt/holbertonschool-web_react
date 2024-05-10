@@ -4,21 +4,18 @@ import BodySection from './BodySection';
 import { StyleSheet, css } from 'aphrodite';
 
 const styles = StyleSheet.create({
-  bodySectionWithMargin: {
-    marginBottom: '40px',
-  },
+  bodySectionWithMargin: { marginBottom: 40 },
 });
 
 class BodySectionWithMarginBottom extends Component {
   render() {
     return (
-      <div className="bodySectionWithMargin">
+      <div className={css(styles.bodySectionWithMargin)}>
         <BodySection {...this.props} />
       </div>
     );
   }
 }
-
 BodySectionWithMarginBottom.propTypes = {
   title: PropTypes.string,
   children: PropTypes.node,

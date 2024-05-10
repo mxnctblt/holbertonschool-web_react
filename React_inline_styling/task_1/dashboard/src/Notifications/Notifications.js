@@ -1,32 +1,14 @@
 import React, { Component } from 'react';
-import { StyleSheet, css } from 'aphrodite';
 import NotificationItem from './NotificationItem';
 import PropTypes from 'prop-types';
 import { NotificationItemShape } from './NotificationItemShape';
+import { StyleSheet, css } from 'aphrodite';
 
 const styles = StyleSheet.create({
-  menuItem: {
-    position: 'absolute',
-    right: '10px',
-  },
-  Notifications: {
-    position: 'absolute',
-    right: '10px',
-    top: '30px',
-    border: '1px red dashed',
-    padding: '1rem',
+  maringRight: {
+    marginRight: '1rem',
   },
 });
-
-const selectors = StyleSheet.create({
-  defaultNotification: {
-    color: 'blue',
-  },
-  urgentNotification: {
-    color: 'red',
-  },
-});
-
 
 class Notifications extends Component {
   constructor(props) {

@@ -1,17 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
 const CourseListRow = ({
   isHeader = false,
   textFirstCell,
   textSecondCell = null,
 }) => {
-  const rowStyle = {
-    backgroundColor: isHeader ? '#deb5b545' : '#f5f5f5ab',
-  };
-
+  const rowHeaderColor = { backgroundColor: '#deb5b545' };
+  const rowColor = { backgroundColor: '#f5f5f5ab' };
   return (
-    <tr style={rowStyle}>
+    <tr style={isHeader ? rowHeaderColor : rowColor}>
       {isHeader ? (
         textSecondCell === null ? (
           <th colSpan={2}>{textFirstCell}</th>

@@ -5,21 +5,11 @@ import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
 import Login from '../Login/Login';
 import CourseList from '../CourseList/CourseList';
-import { StyleSheet, css } from 'aphrodite';
 import { getLatestNotifications } from '../utils/utils';
 import BodySectionWithMarginBottom from '../BodySection/BodySectionWithMarginBottom';
 import BodySection from '../BodySection/BodySection';
 import WithLogging from '../HOC/WithLogging';
-
-const styles = StyleSheet.create({
-  App: {
-    minHeight: '100vh',
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-    fontFamily: 'Arial, Helvetica, sans-serif',
-  },
-});
+import { StyleSheet, css } from 'aphrodite';
 
 const coursesData = [
   { id: 1, name: 'ES6', credit: 60 },
@@ -32,6 +22,24 @@ const notificationData = [
   { id: 2, type: 'urgent', value: 'New resume available' },
   { id: 3, type: 'urgent', html: { __html: getLatestNotifications() } },
 ];
+
+const styles = StyleSheet.create({
+  app: {
+    fontFamily: 'sans-serif',
+    display: 'flex',
+    flexDirection: 'column',
+    minHeight: '100%',
+  },
+  footer: {
+    textAlign: 'center',
+    fontStyle: 'italic',
+    position: 'absolute',
+    bottom: 0,
+    right: 0,
+    left: 0,
+    borderTop: 'solid #e11d3f',
+  },
+});
 
 class App extends Component {
   handleKey = (e) => {
@@ -55,27 +63,31 @@ class App extends Component {
         <WithLogging>
           <Notifications />
         </WithLogging>
-        <div className="App">
+        <div className={css(styles.App)}>
           <Header />
-          {!this.props.isLoggedIn ? (
-            <BodySectionWithMarginBottom title="Log in to continue">
-              <Login />
-            </BodySectionWithMarginBottom>
-          ) : (
-            <BodySectionWithMarginBottom title="Course list">
-              <CourseList />
-            </BodySectionWithMarginBottom>
-          )}
-          <BodySection title="News from the School">
-            <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam
-              nec sem vel nulla tristique commodo. Nam consequat luctus elit,
-              eget feugiat velit ultrices quis. Integer ullamcorper, sapien sit
-              amet malesuada consequat, libero quam ultricies mi, eget lacinia
-              felis mauris sed ipsum.
-            </p>
-          </BodySection>
-          <Footer />
+          <div className={css(styles.body)}>
+            {!this.props.isLoggedIn ? (
+              <BodySectionWithMarginBottom title="Log in to continue">
+                <Login />
+              </BodySectionWithMarginBottom>
+            ) : (
+              <BodySectionWithMarginBottom title="Course list">
+                <CourseList />
+              </BodySectionWithMarginBottom>
+            )}
+            <BodySection title="News from the School">
+              <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam
+                nec sem vel nulla tristique commodo. Nam consequat luctus elit,
+                eget feugiat velit ultrices quis. Integer ullamcorper, sapien
+                sit amet malesuada consequat, libero quam ultricies mi, eget
+                lacinia felis mauris sed ipsum.
+              </p>
+            </BodySection>
+          </div>
+          <div className={css(styles.footer)}>
+            <Footer />
+          </div>
         </div>
       </>
     );

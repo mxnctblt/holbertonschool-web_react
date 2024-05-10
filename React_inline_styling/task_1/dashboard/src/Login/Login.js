@@ -2,9 +2,8 @@ import React from 'react';
 import { StyleSheet, css } from 'aphrodite';
 
 const styles = StyleSheet.create({
-  AppBody: {
-    height: '100%',
-    fontSize: '1.5rem',
+  maringRight: {
+    marginRight: '1rem',
   },
 });
 
@@ -14,11 +13,21 @@ const Login = () => {
       <div className="App-body">
         <p>Login to access the full dashboard</p>
         <form>
-          <label htmlFor="email">email</label>
-          <input type="text" id="email"></input>
-          <label htmlFor="password">password</label>
-          <input type="password" id="password"></input>
-          <button type="submit">Ok</button>
+          <label htmlFor="email">Email:</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            className={css(styles.maringRight)}
+          ></input>
+          <label htmlFor="password">Password:</label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            className={css(styles.maringRight)}
+          ></input>
+          <button type="button">OK</button>
         </form>
       </div>
     </>
