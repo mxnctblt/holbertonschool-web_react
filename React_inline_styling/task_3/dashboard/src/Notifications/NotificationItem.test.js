@@ -3,37 +3,33 @@ import { shallow } from 'enzyme';
 import NotificationItem from './NotificationItem';
 import { StyleSheetTestUtils } from 'aphrodite';
 
-
 StyleSheetTestUtils.suppressStyleInjection();
 
-describe('tests for NotificationItem component', () => {
-  it('should render without crashing', () => {
+afterAll(() => {
+  StyleSheetTestUtils.clearBufferAndResumeStyleInjection();
+});
+
+describe('NotificationItem Component', () => {
+  it('renders without crashing', () => {
     shallow(<NotificationItem />);
   });
 
-  it('should render the correct html when passing dummy props for type and value', () => {
+  it('renders correct html with type and value props', () => {
     const wrapper = shallow(<NotificationItem type="default" value="test" />);
-    expect(wrapper.html()).toBe(
-      '<li data-notification-type="default">test</li>'
-    );
+    const renderedHtml = wrapper.html();
+    expect(renderedHtml).toEqual('<li class="default_1tsdo2i" data-notification-type="default">test</li>');
   });
 
-  it('should render the correct html when passing dummy props for html', () => {
-    const wrapper = shallow(
-      <NotificationItem html={{ __html: '<u>test</u>' }} />
-    );
-    expect(wrapper.html()).toBe(
-      '<li data-notification-type="default"><u>test</u></li>'
-    );
+  it('renders correct html with html prop', () => {
+    const htmlProp = { __html: '<p>test</p>' };
+    const wrapper = shallow(<NotificationItem html={htmlProp} />);
+    expect(wrapper.props().dangerouslySetInnerHTML).toEqual(htmlProp);
   });
 
-  it('should call the function markAsRead with the right id when the user click on the component', () => {
-    const markAsReadMock = jest.fn();
-    const wrapper = shallow(
-      <NotificationItem handleClick={markAsReadMock} id={2} />
-    );
-    wrapper.simulate('click');
-    expect(markAsReadMock).toHaveBeenCalledWith(2);
-    jest.clearAllMocks();
+  it('verifies that when the li is clicked the function markAsRead is called with the right id', () => {
+    const mockMarkAsRead = jest.fn();
+    const wrapper = shallow(<NotificationItem id={1} markAsRead={mockMarkAsRead} />);
+    wrapper.find('li').simulate('click');
+    expect(mockMarkAsRead).toHaveBeenCalledWith(1);
   });
-});
+})
