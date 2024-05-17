@@ -1,27 +1,29 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import CourseListRow from './CourseListRow';
-import { StyleSheetTestUtils } from 'aphrodite';
 
-
-StyleSheetTestUtils.suppressStyleInjection();
-
-describe('test for CourseListRow component', () => {
-  it('should render one cell with colspan = 2 attribute when isHeader is true and textSecondCell is null', () => {
-    const wrapper = shallow(<CourseListRow isHeader textFirstCell="test" />);
-    expect(wrapper.find('th').length).toBe(1);
-    expect(wrapper.find('th').prop('colSpan')).toBe(2);
+describe('CourseListRow Component', () => {
+  it('renders one cell with colSpan equal to 2 when isHeader is true and textSecondCell is null', () => {
+    const wrapper = shallow(<CourseListRow isHeader={true} textFirstCell="test" />);
+    const th = wrapper.find('th');
+    expect(th).toHaveLength(1);
+    expect(th.prop('colSpan')).toEqual('2');
+    expect(th.text()).toEqual('test');
   });
 
-  it('should render two cells when isHeader is true and textSecondCell is not null', () => {
-    const wrapper = shallow(
-      <CourseListRow isHeader textFirstCell="test" textSecondCell="test" />
-    );
-    expect(wrapper.find('th').length).toBe(2);
+  it('renders two cells when isHeader is true and textSecondCell is not null', () => {
+    const wrapper = shallow(<CourseListRow isHeader={true} textFirstCell="test1" textSecondCell="test2" />);
+    const th = wrapper.find('th');
+    expect(th).toHaveLength(2);
+    expect(th.at(0).text()).toEqual('test1');
+    expect(th.at(1).text()).toEqual('test2');
   });
 
-  it('should render one td when isHeader is false', () => {
-    const wrapper = shallow(<CourseListRow textFirstCell="test" />);
-    expect(wrapper.find('tr').children('td').length).toBe(2);
+  it('renders correctly two td elements within a tr element when isHeader is false', () => {
+    const wrapper = shallow(<CourseListRow isHeader={false} textFirstCell="test1" textSecondCell="test2" />);
+    const td = wrapper.find('tr td');
+    expect(td).toHaveLength(2);
+    expect(td.at(0).text()).toEqual('test1');
+    expect(td.at(1).text()).toEqual('test2');
   });
 });

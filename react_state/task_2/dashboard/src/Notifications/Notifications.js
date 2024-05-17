@@ -12,6 +12,7 @@ class Notifications extends Component {
   }
 
   handleButtonClick = () => {
+    console.log('Close button has been clicked');
     this.props.handleHideDrawer();
   };
 
@@ -20,16 +21,14 @@ class Notifications extends Component {
   }
 
   shouldComponentUpdate(nextProps) {
-    if (this.props.listNotifications.length !== nextProps.listNotifications.length ||
-        this.props.displayDrawer !== nextProps.displayDrawer) {
-      return true;
-    }
+      if (this.props.displayDrawer !== nextProps.displayDrawer) return true;
+      if (this.props.listNotifications.length < nextProps.listNotifications.length) return true;
     return false;
   }
 
   render() {
-    const { displayDrawer, handleDisplayDrawer } = this.props;
-    const menuItemStyle = css(displayDrawer ? styles.hidden : styles.MenuItem);
+    const { displayDrawer } = this.props;
+    const menuItemStyle = css(this.props.displayDrawer ? styles.hidden : styles.MenuItem);
 
     const buttonStyle = {
       background: 'transparent',
@@ -41,18 +40,13 @@ class Notifications extends Component {
 
     return (
       <>
-        <div className={menuItemStyle} onClick={handleDisplayDrawer}>
+        <div className={menuItemStyle} onClick={this.props.handleDisplayDrawer}>
           <p>Your notifications</p>
         </div>
         {displayDrawer ? (
           <div className={css(styles.Notifications, styles.small)} id="Notifications">
             {this.props.listNotifications.length === 0 ? (
-              <>
-                <button style={buttonStyle} aria-label='Close' onClick={this.handleButtonClick}>
-                  <img src={closeIcon} alt='Close' width={12} />
-                </button>
-                <p>No new notification for now</p>
-              </>
+              <p>No new notification for now</p>
             ) : (
               <>
                 <p>Here is the list of notifications</p>
@@ -90,8 +84,6 @@ Notifications.propTypes = {
 Notifications.defaultProps = {
   displayDrawer: false,
   listNotifications: [],
-  handleDisplayDrawer: () => {},
-  handleHideDrawer: () => {},
 };
 
 const opacityAnimationFrames = {
@@ -163,4 +155,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default Notifications
+export default Notifications;

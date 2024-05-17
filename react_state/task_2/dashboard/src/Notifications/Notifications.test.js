@@ -64,7 +64,6 @@ describe('Notifications Component', () => {
     jest.restoreAllMocks();
   });
 
-
   it('does not rerender with same list', () => {
     const notifications = [
       { id: 1, type: 'default', value: 'Notification 1' },
@@ -98,16 +97,21 @@ describe('Notifications Component', () => {
   });
 
   it('calls handleDisplayDrawer when clicking on the menu item', () => {
-    const handleDisplayDrawerMock = jest.fn();
-    const wrapper = shallow(<Notifications handleDisplayDrawer={handleDisplayDrawerMock} />);
-    wrapper.find('div.MenuItem_1o4b8go').simulate('click');
-    expect(handleDisplayDrawerMock).toHaveBeenCalled();
+    const handleDisplayDrawer = jest.fn();
+    const wrapper = shallow(<Notifications handleDisplayDrawer={handleDisplayDrawer} />);
+    const menuItem = wrapper.find('div.MenuItem_1o4b8go');
+    menuItem.simulate('click');
+    expect(handleDisplayDrawer).toHaveBeenCalledTimes(1);
+    handleDisplayDrawer.mockClear();
   });
 
-  it('calls handleHideDrawer when clicking on the button', () => {
-    const handleHideDrawerMock = jest.fn();
-    const wrapper = shallow(<Notifications handleHideDrawer={handleHideDrawerMock} displayDrawer={true} />);
-    wrapper.find('button').simulate('click');
-    expect(handleHideDrawerMock).toHaveBeenCalled();
+  it('calls handleHideDrawer when clicking on the close button', () => {
+    const handleHideDrawer = jest.fn();
+    const wrapper = shallow(<Notifications displayDrawer={true} handleHideDrawer={handleHideDrawer} />);
+    const button = wrapper.find('button');
+    button.simulate('click');
+    expect(handleHideDrawer).toHaveBeenCalledTimes(1);
+    handleHideDrawer.mockClear();
+    jest.restoreAllMocks();
   });
 });

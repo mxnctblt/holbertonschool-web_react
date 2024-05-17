@@ -1,33 +1,40 @@
-import React from 'react';
-import logo from '../assets/holberton-logo.jpg';
+import React, { Component } from 'react';
+import logo from '../assets/holberton_logo.jpeg';
 import { StyleSheet, css } from 'aphrodite';
+import AppContext from '../App/AppContext';
 
-const styles = StyleSheet.create({
-  'App-header': {
-    borderBottom: `5px rgb(201, 45, 45) solid`,
-    display: 'flex',
-    alignItems: 'center',
-    color: `rgb(201, 45, 45)`,
-    fontSize: `1.8rem`,
-    '@media (max-width: 900px)': {
-      fontSize: '1rem',
-    },
-  },
-  'App-logo': {
-    width: 300,
-    '@media (max-width: 900px)': {
-      width: 150,
-    },
-  },
-});
-
-const Header = () => {
-  return (
-    <header className={css(styles['App-header'])}>
-      <img src={logo} className={css(styles['App-logo'])} alt="logo" />
+class Header extends Component {
+  render() {
+      return (
+          <>
+    <header className={css(styles.AppHeader)}>
+      <img src={logo} alt="holberton logo" className={css(styles.logo)}/>
       <h1>School dashboard</h1>
     </header>
-  );
-};
+    {this.context.user.isLoggedIn ? (
+      <section id='logoutSection'>
+        Welcome <strong>{this.context.user.email}</strong> <a onClick={() => {this.context.logOut()}}>(logout)</a>
+      </section>
+  ) : null}
+   </>
+        );
+    }
+}
+Header.contextType = AppContext;
+
+const styles = StyleSheet.create({
+  AppHeader: {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'flex-start',
+      fonSize: '1rem',
+      color: '#e11d3f',
+      bordeBottom: 'solid #e11d3f'
+  },
+    
+  logo: {
+      width: 250
+  }
+});
 
 export default Header;

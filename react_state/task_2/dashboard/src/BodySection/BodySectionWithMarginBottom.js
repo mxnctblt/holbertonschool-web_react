@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import BodySection from './BodySection';
 import { StyleSheet, css } from 'aphrodite';
-
-const styles = StyleSheet.create({
-  bodySectionWithMargin: { marginBottom: 40 },
-});
+import BodySection from './BodySection';
 
 class BodySectionWithMarginBottom extends Component {
+  constructor(props) {
+    super(props);
+  }
+
   render() {
     return (
       <div className={css(styles.bodySectionWithMargin)}>
@@ -16,9 +16,21 @@ class BodySectionWithMarginBottom extends Component {
     );
   }
 }
+
 BodySectionWithMarginBottom.propTypes = {
   title: PropTypes.string,
-  children: PropTypes.node,
+  children: PropTypes.node
 };
+
+BodySectionWithMarginBottom.defaultProps = {
+  title: null,
+  children: null
+};
+
+const styles = StyleSheet.create({
+  bodySectionWithMargin: {
+    marginBottom: '40px'
+  }
+});
 
 export default BodySectionWithMarginBottom;

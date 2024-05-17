@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { StyleSheet, css } from 'aphrodite';
 
 const NotificationItem = ({ id, value, type, html, markAsRead }) => {
+  // Define styles using Aphrodite
   const styles = StyleSheet.create({
     default: {
         color: 'blue'
@@ -20,6 +21,7 @@ const NotificationItem = ({ id, value, type, html, markAsRead }) => {
     }
   });
 
+  // Conditionally apply styles based on the type prop
   const listItemStyles = type === 'urgent' ? styles.urgent : styles.default;
   const style = css(listItemStyles, styles.small);
 

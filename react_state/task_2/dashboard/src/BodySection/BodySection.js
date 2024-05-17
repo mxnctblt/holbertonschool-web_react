@@ -2,6 +2,10 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 class BodySection extends Component {
+  constructor(props) {
+    super(props);
+  }
+
   render() {
     return (
       <div className="bodySection">
@@ -14,7 +18,7 @@ class BodySection extends Component {
 
 BodySection.propTypes = {
   title: PropTypes.string,
-  children: PropTypes.node,
+  children: PropTypes.node
 };
 
 export default BodySection;
