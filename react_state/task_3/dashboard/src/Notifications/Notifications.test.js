@@ -56,46 +56,6 @@ describe('Notifications Component', () => {
     expect(wrapper.contains(<p>Here is the list of notifications</p>)).toBe(false);
   });
 
-  it('Tests that when calling the function markAsRead on an instance of the component, the spy is being called with the right message', () => {
-    const mockConsole = jest.spyOn(console, 'log').mockImplementation(() => {});
-    const wrapper = shallow(<Notifications displayDrawer={true} />);
-    wrapper.instance().markAsRead(1);
-    expect(mockConsole).toHaveBeenCalledWith('Notification 1 has been marked as read');
-    jest.restoreAllMocks();
-  });
-
-  it('does not rerender with same list', () => {
-    const notifications = [
-      { id: 1, type: 'default', value: 'Notification 1' },
-      { id: 2, type: 'urgent', value: 'Notification 2' },
-      { id: 3, type: 'default', value: 'Notification 3' }
-    ];
-    const wrapper = shallow(<Notifications displayDrawer={true} listNotifications={notifications} />);
-    const instance = wrapper.instance();
-    const shouldUpdateSpy = jest.spyOn(instance, 'shouldComponentUpdate');
-    wrapper.setProps({ listNotifications: notifications });
-    expect(shouldUpdateSpy).toHaveBeenCalledTimes(1);
-  });
-
-  it('rerenders with longer list', () => {
-    const notifications = [
-      { id: 1, type: 'default', value: 'Notification 1' },
-      { id: 2, type: 'urgent', value: 'Notification 2' },
-      { id: 3, type: 'default', value: 'Notification 3' }
-    ];
-    const wrapper = shallow(<Notifications displayDrawer={true} listNotifications={notifications} />);
-    const instance = wrapper.instance();
-    const shouldUpdateSpy = jest.spyOn(instance, 'shouldComponentUpdate');
-    const longerList = [
-      { id: 1, type: 'default', value: 'Notification 1' },
-      { id: 2, type: 'urgent', value: 'Notification 2' },
-      { id: 3, type: 'default', value: 'Notification 3' },
-      { id: 4, type: 'urgent', value: 'Notification 4' }
-    ];
-    wrapper.setProps({ listNotifications: longerList });
-    expect(shouldUpdateSpy).toHaveBeenCalledTimes(1);
-  });
-
   it('calls handleDisplayDrawer when clicking on the menu item', () => {
     const handleDisplayDrawer = jest.fn();
     const wrapper = shallow(<Notifications handleDisplayDrawer={handleDisplayDrawer} />);
@@ -106,8 +66,14 @@ describe('Notifications Component', () => {
   });
 
   it('calls handleHideDrawer when clicking on the close button', () => {
+    let listNotifications;
+        listNotifications = [
+            { id: 1, type: 'default', value: 'New course available' },
+            { id: 2, type: 'urgent', value: 'New resume available' },
+            { id: 3, type: 'urgent', html: {__html: '<u>test</u>'} }
+        ];
     const handleHideDrawer = jest.fn();
-    const wrapper = shallow(<Notifications displayDrawer={true} handleHideDrawer={handleHideDrawer} />);
+    const wrapper = shallow(<Notifications displayDrawer={true} listNotifications={listNotifications} handleHideDrawer={handleHideDrawer} />);
     const button = wrapper.find('button');
     button.simulate('click');
     expect(handleHideDrawer).toHaveBeenCalledTimes(1);

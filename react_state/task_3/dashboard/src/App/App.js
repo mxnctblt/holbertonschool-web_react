@@ -12,6 +12,18 @@ import { getLatestNotification } from '../utils/utils';
 import BodySectionWithMarginBottom from '../BodySection/BodySectionWithMarginBottom';
 import AppContext from './AppContext';
 
+const listCourses = [
+  { id: 1, name: 'ES6', credit: 60 },
+  { id: 2, name: 'Webpack', credit: 20 },
+  { id: 3, name: 'React', credit: 40 },
+];
+
+const listNotifications = [
+  { id: 1, type: 'default', value: 'New course available' },
+  { id: 2, type: 'urgent', value: 'New resume available' },
+  { id: 3, type: 'urgent', html: { __html: getLatestNotification() } },
+];
+
 class App extends Component {
   static propTypes = {
     isLoggedIn: PropTypes.bool,
@@ -31,25 +43,15 @@ class App extends Component {
         email: '',
         password: '',
         isLoggedIn: false
-      }
+      },
+      listNotifications: listNotifications
     };
     this.handleDisplayDrawer = this.handleDisplayDrawer.bind(this);
     this.handleHideDrawer = this.handleHideDrawer.bind(this);
     this.logIn = this.logIn.bind(this);
     this.logOut = this.logOut.bind(this);
+    this.markNotificationAsRead = this.markNotificationAsRead.bind(this);
   }
-
-  listCourses = [
-    { id: 1, name: 'ES6', credit: 60 },
-    { id: 2, name: 'Webpack', credit: 20 },
-    { id: 3, name: 'React', credit: 40 },
-  ];
-
-  listNotifications = [
-    { id: 1, type: 'default', value: 'New course available' },
-    { id: 2, type: 'urgent', value: 'New resume available' },
-    { id: 3, type: 'urgent', html: { __html: getLatestNotification() } },
-  ];
 
   componentDidMount() {
     window.addEventListener('keydown', this.handleKeyDown);
@@ -95,6 +97,13 @@ class App extends Component {
     });
   }
 
+  markNotificationAsRead(id) {
+    const updatedList = this.state.listNotifications.filter((notification) => {
+      return notification.id !== id;
+    });
+    this.setState({listNotifications: updatedList});
+  }
+
   render() {
     const { displayDrawer } = this.state; 
 
@@ -107,13 +116,14 @@ class App extends Component {
             displayDrawer={displayDrawer}
             handleDisplayDrawer={this.handleDisplayDrawer}
             handleHideDrawer={this.handleHideDrawer}
-            listNotifications={this.listNotifications}
+            listNotifications={this.state.listNotifications}
+            markNotificationAsRead={this.markNotificationAsRead}
           />
             <div className={css(styles.app)}>
             <Header />
             {this.state.user.isLoggedIn ? (
               <BodySectionWithMarginBottom title='Course list'>
-                <CourseList listCourses={this.listCourses} />
+                <CourseList listCourses={listCourses} />
               </BodySectionWithMarginBottom>
             ) : (
               <BodySectionWithMarginBottom title='Log in to continue'>

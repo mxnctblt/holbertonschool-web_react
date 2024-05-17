@@ -41,8 +41,23 @@ describe('App Component', () => {
 });
 
 describe('App Component with isLoggedIn', () => {
+  let user;
+    let listNotifications
+    beforeAll(() => {
+        user = {
+            email: 'hello@world.com',
+            password: 'test123!',
+            isLoggedIn: true
+        };
+        listNotifications = [
+            { id: 1, type: 'default', value: 'New course available' },
+            { id: 2, type: 'urgent', value: 'New resume available' },
+            { id: 3, type: 'urgent', html: {__html: <strong>hello</strong>} }
+        ];
+    });
   it('renders CourseList', () => {
     const wrapper = shallow(<App isLoggedIn />);
+    wrapper.setState({user});
     expect(wrapper.find('CourseList')).toHaveLength(1);
   });
 
@@ -74,9 +89,6 @@ describe('App Component with isLoggedIn', () => {
     instance.handleHideDrawer();
     expect(instance.state.displayDrawer).toBe(false);
   });
-});
-
-describe('tests to verify logIn and logOut function', () => {
   it('should update the state when logIn is been called', () => {
     const wrapper = shallow(<App />);
     wrapper.instance().logIn();
@@ -89,5 +101,13 @@ describe('tests to verify logIn and logOut function', () => {
     wrapper.instance().logOut();
     const user = wrapper.state('user');
     expect(user.isLoggedIn).toBe(false);
+  });
+
+  it('checks that markNotificationAsRead works as intended', () => {
+    const wrapper = shallow(<App/>);
+    wrapper.setState({user});
+    expect(wrapper.state().listNotifications.length).toEqual(3);
+    wrapper.instance().markNotificationAsRead(1);
+    expect(wrapper.state().listNotifications.length).toEqual(2);
   });
 });

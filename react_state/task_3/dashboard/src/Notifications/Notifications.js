@@ -8,23 +8,12 @@ import NotificationItemShape from './NotificationItemShape';
 class Notifications extends Component {
   constructor(props) {
     super(props);
-    this.markAsRead = this.markAsRead.bind(this);
   }
 
   handleButtonClick = () => {
     console.log('Close button has been clicked');
     this.props.handleHideDrawer();
   };
-
-  markAsRead(id) {
-    console.log(`Notification ${id} has been marked as read`);
-  }
-
-  shouldComponentUpdate(nextProps) {
-      if (this.props.displayDrawer !== nextProps.displayDrawer) return true;
-      if (this.props.listNotifications.length < nextProps.listNotifications.length) return true;
-    return false;
-  }
 
   render() {
     const { displayDrawer } = this.props;
@@ -60,7 +49,9 @@ class Notifications extends Component {
                       type={notification.type}
                       value={notification.value}
                       html={notification.html}
-                      markAsRead={this.markAsRead}
+                      markAsRead={() =>
+                        this.props.markNotificationAsRead(notification.id)
+                      }
                       id={notification.id}
                     />
                   ))}
@@ -79,11 +70,15 @@ Notifications.propTypes = {
   listNotifications: PropTypes.arrayOf(NotificationItemShape),
   handleDisplayDrawer: PropTypes.func,
   handleHideDrawer: PropTypes.func,
+  markNotificationAsRead: PropTypes.func,
 };
 
 Notifications.defaultProps = {
   displayDrawer: false,
   listNotifications: [],
+  handleDisplayDrawer: () => {},
+  handleHideDrawer: () => {},
+  markNotificationAsRead: () => {},
 };
 
 const opacityAnimationFrames = {
