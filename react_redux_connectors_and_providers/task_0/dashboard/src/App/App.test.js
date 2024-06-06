@@ -2,6 +2,8 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import App from './App';
 import { StyleSheetTestUtils } from 'aphrodite';
+import { mapStateToProps } from './App';
+import { fromJS } from 'immutable';
 
 StyleSheetTestUtils.suppressStyleInjection();
 
@@ -109,5 +111,17 @@ describe('App Component with isLoggedIn', () => {
     expect(wrapper.state().listNotifications.length).toEqual(3);
     wrapper.instance().markNotificationAsRead(1);
     expect(wrapper.state().listNotifications.length).toEqual(2);
+  });
+});
+
+describe('mapStateToProps', () => {
+  it('should return the correct object', () => {
+    let state = fromJS({
+      isUserLoggedIn: true
+    });
+    const expectedProps = {
+      isLoggedIn: true
+    };
+    expect(mapStateToProps(state)).toEqual(expectedProps);
   });
 });
