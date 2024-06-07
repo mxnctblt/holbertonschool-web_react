@@ -1,29 +1,37 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import CourseListRow from './CourseListRow';
+import { StyleSheetTestUtils } from 'aphrodite';
 
-describe('CourseListRow Component', () => {
-  it('renders one cell with colSpan equal to 2 when isHeader is true and textSecondCell is null', () => {
-    const wrapper = shallow(<CourseListRow isHeader={true} textFirstCell="test" />);
-    const th = wrapper.find('th');
-    expect(th).toHaveLength(1);
-    expect(th.prop('colSpan')).toEqual('2');
-    expect(th.text()).toEqual('test');
+describe('<CourseListRow/>', () => {
+  beforeEach(() => {
+    StyleSheetTestUtils.suppressStyleInjection();
   });
 
-  it('renders two cells when isHeader is true and textSecondCell is not null', () => {
-    const wrapper = shallow(<CourseListRow isHeader={true} textFirstCell="test1" textSecondCell="test2" />);
-    const th = wrapper.find('th');
-    expect(th).toHaveLength(2);
-    expect(th.at(0).text()).toEqual('test1');
-    expect(th.at(1).text()).toEqual('test2');
+  afterEach(() => {
+    StyleSheetTestUtils.clearBufferAndResumeStyleInjection();
   });
 
-  it('renders correctly two td elements within a tr element when isHeader is false', () => {
-    const wrapper = shallow(<CourseListRow isHeader={false} textFirstCell="test1" textSecondCell="test2" />);
-    const td = wrapper.find('tr td');
-    expect(td).toHaveLength(2);
-    expect(td.at(0).text()).toEqual('test1');
-    expect(td.at(1).text()).toEqual('test2');
+  it('test when isHeader is true and textSecondCell does not exist', () => {
+    const wrapper = shallow(<CourseListRow isHeader={true} textFirstCell="Available courses" />);
+    expect(wrapper.find('th').parent().prop('className')).toContain('headerCentered_9r3akn');
+    expect(wrapper.html()).toContain("<th colSpan=\"2\">Available courses</th>");
+  });
+
+  it('test when isHeader is true and textSecondCell is present', () => {
+    const wrapper = shallow(<CourseListRow isHeader={true} textFirstCell="Course name" textSecondCell="Credit" />);
+    expect(wrapper.html()).toContain("<th>Course name</th><th>Credit</th>");
+  });
+
+  it('test when isHeader is false', () => {
+    const wrapper = shallow(<CourseListRow isHeader={false} textFirstCell="Course name" textSecondCell="Credit" />);
+    expect(wrapper.html()).toContain("<td><input type=\"checkbox\"/>Course name</td><td>Credit</td>");
+  });
+
+  it('should check the checkbox and verify the class change', () => {
+    const wrapper = shallow(<CourseListRow isHeader={false} textFirstCell="Course name" textSecondCell="Credit" />);
+    const checkbox = wrapper.find('input[type="checkbox"]');
+    checkbox.simulate('change', { target: { checked: true } });
+    expect(wrapper.find('tr').prop('className')).toContain('rowChecked');
   });
 });

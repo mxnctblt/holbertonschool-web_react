@@ -1,17 +1,27 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
+import { css, StyleSheet } from 'aphrodite';
 
-class BodySection extends Component {
-  constructor(props) {
-    super(props);
+
+const styles = StyleSheet.create({
+  bodySection: {
+    marginTop: '90px',
+    marginLeft: '20px',
+    fontSize: '1.1rem',
   }
+});
 
+
+class BodySection extends React.Component {
   render() {
+    const { children, title } = this.props;
     return (
-      <div className="bodySection">
-        <h2>{this.props.title}</h2>
-        {this.props.children}
-      </div>
+      <>
+        <div className={css(styles.bodySection)}>
+          <h2>{title}</h2>
+          {children}
+        </div>
+      </>
     );
   }
 }

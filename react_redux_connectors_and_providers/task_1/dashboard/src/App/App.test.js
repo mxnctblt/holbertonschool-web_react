@@ -1,126 +1,160 @@
 import React from 'react';
-import { shallow } from 'enzyme';
+import { mount } from 'enzyme';
+import { Provider } from 'react-redux';
+import { createStore } from 'redux';
 import App from './App';
+import Notifications from '../Notifications/Notifications';
+import Header from '../Header/Header';
+import Login from '../Login/Login';
+import Footer from '../Footer/Footer';
+import CourseList from '../CourseList/CourseList';
 import { StyleSheetTestUtils } from 'aphrodite';
-import { mapStateToProps } from './App';
+import { AppContext, defaultUser } from './AppContext';
+import uiReducer from '../reducers/uiReducer';
 import { fromJS } from 'immutable';
+import { mapStateToProps } from './App';
 
-StyleSheetTestUtils.suppressStyleInjection();
+describe('App component', () => {
+  let wrapper;
+  let store;
 
-afterAll(() => {
-  StyleSheetTestUtils.clearBufferAndResumeStyleInjection();
-});
-
-describe('App Component', () => {
-  it('renders without crashing', () => {
-    shallow(<App />);
+  beforeEach(() => {
+    StyleSheetTestUtils.suppressStyleInjection();
+    store = createStore(uiReducer);
+    wrapper = mount(
+      <Provider store={store}>
+        <AppContext.Provider value={{ user: defaultUser, logOut: jest.fn() }}>
+          <App />
+        </AppContext.Provider>
+      </Provider>
+    );
   });
 
-  it('renders Notifications', () => {
-    const wrapper = shallow(<App />);
-    expect(wrapper.find('Notifications')).toHaveLength(1);
+  afterEach(() => {
+    StyleSheetTestUtils.clearBufferAndResumeStyleInjection();
+    wrapper.unmount();
   });
 
-  it('renders Header', () => {
-    const wrapper = shallow(<App />);
-    expect(wrapper.find('Header')).toHaveLength(1);
+  it('contains the Notifications component', () => {
+    expect(wrapper.find(Notifications).exists()).toBe(true);
   });
 
-  it('renders Login', () => {
-    const wrapper = shallow(<App />);
-    expect(wrapper.find('Login')).toHaveLength(1);
+  it('contains the Header component', () => {
+    expect(wrapper.find(Header).exists()).toBe(true);
   });
 
-  it('renders Footer', () => {
-    const wrapper = shallow(<App />);
-    expect(wrapper.find('Footer')).toHaveLength(1);
+  it('contains the Login component when not logged in', () => {
+    expect(wrapper.find(Login).exists()).toBe(true);
   });
 
-  it('CourseList is not rendered', () => {
-    const wrapper = shallow(<App />);
-    expect(wrapper.find('CourseList')).toHaveLength(0);
+  it('does not display CourseList when not logged in', () => {
+    expect(wrapper.find(CourseList).exists()).toBe(false);
   });
-});
 
-describe('App Component with isLoggedIn', () => {
-  let user;
-    let listNotifications
-    beforeAll(() => {
-        user = {
-            email: 'hello@world.com',
-            password: 'test123!',
-            isLoggedIn: true
-        };
-        listNotifications = [
-            { id: 1, type: 'default', value: 'New course available' },
-            { id: 2, type: 'urgent', value: 'New resume available' },
-            { id: 3, type: 'urgent', html: {__html: <strong>hello</strong>} }
-        ];
+  it('contains the Footer component', () => {
+    expect(wrapper.find(Footer).exists()).toBe(true);
+  });
+
+  describe('when user is logged in', () => {
+    beforeEach(() => {
+      const appInstance = wrapper.find(App).childAt(0).instance();
+      appInstance.setState({
+        user: {
+          email: 'test@example.com',
+          password: 'password',
+          isLoggedIn: true,
+        }
+      });
+      wrapper.update();
     });
-  it('renders CourseList', () => {
-    const wrapper = shallow(<App isLoggedIn />);
-    wrapper.setState({user});
-    expect(wrapper.find('CourseList')).toHaveLength(1);
+
+    it('does not include the Login component when logged in', () => {
+      expect(wrapper.find(Login).exists()).toBe(false);
+    });
+
+    it('includes the CourseList component when logged in', () => {
+      expect(wrapper.find(CourseList).exists()).toBe(true);
+    });
   });
 
-  it('calls logOut function and displays alert when Ctrl+H is pressed', () => {
-    const mockLogOut = jest.fn();
-    const logger = jest.spyOn(window, 'alert');
-    expect(logger);
-    expect(mockLogOut);
-    jest.restoreAllMocks();
+  describe('keydown event tests for logout', () => {
+    const keyDownEvent = (ctrlKey, key) => {
+      return new KeyboardEvent('keydown', { ctrlKey, key, bubbles: true });
+    };
+
+    it('calls logOut and shows alert when Ctrl+H is pressed', () => {
+      const alertMock = jest.spyOn(window, 'alert').mockImplementation(() => {});
+      document.dispatchEvent(keyDownEvent(true, 'h'));
+      const appInstance = wrapper.find(App).childAt(0).instance();
+      expect(appInstance.state.user).toEqual(defaultUser);
+      expect(alertMock).toHaveBeenCalledWith('Logging you out');
+      alertMock.mockRestore();
+    });
   });
 
-  it('verifies that the default state for displayDrawer is false', () => {
-    const wrapper = shallow(<App />);
-    const instance = wrapper.instance();
-    expect(instance.state.displayDrawer).toBe(false);
+  it('logIn function updates the state correctly', () => {
+    const appInstance = wrapper.find(App).childAt(0).instance();
+    appInstance.logIn('test@example.com', 'password');
+    expect(appInstance.state.user).toEqual({
+      email: 'test@example.com',
+      password: 'password',
+      isLoggedIn: true,
+    });
   });
 
-  it('verifies that after calling handleDisplayDrawer, the state should now be true', () => {
-    const wrapper = shallow(<App />);
-    const instance = wrapper.instance();
-    instance.handleDisplayDrawer();
-    expect(instance.state.displayDrawer).toBe(true);
+  it('logOut function updates the state correctly', () => {
+    const appInstance = wrapper.find(App).childAt(0).instance();
+    appInstance.setState({
+      user: {
+        email: 'test@example.com',
+        password: 'password',
+        isLoggedIn: true,
+      }
+    });
+    appInstance.logOut();
+    expect(appInstance.state.user).toEqual(defaultUser);
   });
 
-  it('verifies that after calling handleHideDrawer, the state is updated to be false', () => {
-    const wrapper = shallow(<App />);
-    const instance = wrapper.instance();
-    instance.handleDisplayDrawer();
-    instance.handleHideDrawer();
-    expect(instance.state.displayDrawer).toBe(false);
+  it('markNotificationAsRead function updates the state correctly', () => {
+    const appInstance = wrapper.find(App).childAt(0).instance();
+    const notifications = [
+      { id: 1, value: 'New course available', type: 'default' },
+      { id: 2, value: 'New resume available', type: 'urgent' },
+      { id: 3, html: { __html: '<strong>Urgent requirement</strong> - complete by EOD' }, type: 'urgent' },
+    ];
+    appInstance.setState({ listNotifications: notifications });
+    appInstance.markNotificationAsRead(2);
+    expect(appInstance.state.listNotifications).toEqual([
+      { id: 1, value: 'New course available', type: 'default' },
+      { id: 3, html: { __html: '<strong>Urgent requirement</strong> - complete by EOD' }, type: 'urgent' },
+    ]);
   });
-  it('should update the state when logIn is been called', () => {
-    const wrapper = shallow(<App />);
-    wrapper.instance().logIn();
-    const user = wrapper.state('user');
-    expect(user.isLoggedIn).toBe(true);
-  });
-  it('should update the state when logOut is been called', () => {
-    const wrapper = shallow(<App />);
-    wrapper.setState({ user: { isLoggedIn: true } });
-    wrapper.instance().logOut();
-    const user = wrapper.state('user');
-    expect(user.isLoggedIn).toBe(false);
+  
+  it('displays the drawer when displayNotificationDrawer is called', () => {
+    store.dispatch({ type: 'DISPLAY_NOTIFICATION_DRAWER' });
+    wrapper.update();
+    const appInstance = wrapper.find(App).childAt(0).instance();
+    expect(appInstance.props.displayDrawer).toEqual(true);
   });
 
-  it('checks that markNotificationAsRead works as intended', () => {
-    const wrapper = shallow(<App/>);
-    wrapper.setState({user});
-    expect(wrapper.state().listNotifications.length).toEqual(3);
-    wrapper.instance().markNotificationAsRead(1);
-    expect(wrapper.state().listNotifications.length).toEqual(2);
+  it('hides the drawer when hideNotificationDrawer is called', () => {
+    store.dispatch({ type: 'DISPLAY_NOTIFICATION_DRAWER' });
+    store.dispatch({ type: 'HIDE_NOTIFICATION_DRAWER' });
+    wrapper.update();
+    const appInstance = wrapper.find(App).childAt(0).instance();
+    expect(appInstance.props.displayDrawer).toEqual(false);
   });
 });
 
 describe('mapStateToProps', () => {
   it('should return the correct object', () => {
     let state = fromJS({
-      isUserLoggedIn: true
+      isUserLoggedIn: true,
+      isNotificationDrawerVisible: false
     });
     const expectedProps = {
-      isLoggedIn: true
+      isLoggedIn: true,
+      displayDrawer: false
     };
     expect(mapStateToProps(state)).toEqual(expectedProps);
   });

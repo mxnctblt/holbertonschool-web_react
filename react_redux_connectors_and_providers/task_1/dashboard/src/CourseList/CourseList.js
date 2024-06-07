@@ -2,51 +2,46 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import CourseListRow from './CourseListRow';
 import CourseShape from './CourseShape';
-import './CourseList.css';
-import { StyleSheet, css } from 'aphrodite';
+import { css, StyleSheet } from 'aphrodite';
 
-function CourseList({ listCourses }) {
+
+const styles = StyleSheet.create({
+  courseList: {
+    width: '90%',
+    margin: 'auto',
+    border: '1px solid rgb(194, 188, 188)',
+  },
+});
+
+const CourseList = ({ listCourses = [] }) => {
   return (
-    <table className={css(styles.courseList)} id="CourseList">
+    <table id="CourseList" className={css(styles.courseList)}>
       <thead>
-        <CourseListRow isHeader={true} textFirstCell="Available courses" />
-        <CourseListRow isHeader={true} textFirstCell="Course name" textSecondCell="Credit" />
+        <CourseListRow textFirstCell="Available courses" isHeader={true} />
+        <CourseListRow textFirstCell="Course name" textSecondCell="Credit" isHeader={true} />
       </thead>
       <tbody>
-        {listCourses.length === 0 ? (
-          <CourseListRow isHeader={false} textFirstCell="No course available yet" />
-        ) : (
+        {listCourses.length > 0 ? (
           listCourses.map(course => (
             <CourseListRow
               key={course.id}
-              isHeader={false}
               textFirstCell={course.name}
-              textSecondCell={course.credit}
+              textSecondCell={String(course.credit)}
+              isHeader={false}
             />
           ))
+        ) : (
+          <tr>
+            <td colSpan="2">No course available yet</td>
+          </tr>
         )}
       </tbody>
     </table>
   );
-}
+};
 
 CourseList.propTypes = {
   listCourses: PropTypes.arrayOf(CourseShape)
 };
-
-CourseList.defaultProps = {
-  listCourses: []
-};
-
-const styles = StyleSheet.create({
-  courseList: {
-    border: 'solid 1px rgb(227, 220, 220)',
-    width: '90%',
-    textAlign: 'left',
-    marginTop: '30px',
-    marginLeft: '5%',
-    fontFamily: '\'Times New Roman\', Times, serif'
-  }
-});
 
 export default CourseList;

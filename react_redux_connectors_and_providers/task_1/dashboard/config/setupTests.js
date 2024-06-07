@@ -1,7 +1,4 @@
-// src/setupTests.js
 import { configure } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16';
-import { StyleSheetTestUtils } from 'aphrodite';
+import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 
 configure({ adapter: new Adapter() });
-StyleSheetTestUtils.suppressStyleInjection();

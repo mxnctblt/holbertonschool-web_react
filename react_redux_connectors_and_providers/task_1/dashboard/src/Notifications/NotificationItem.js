@@ -1,56 +1,57 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { StyleSheet, css } from 'aphrodite';
+import React from "react";
+import PropTypes from "prop-types";
+import { StyleSheet, css } from "aphrodite";
 
-const NotificationItem = ({ id, value, type, html, markAsRead }) => {
-  // Define styles using Aphrodite
-  const styles = StyleSheet.create({
-    default: {
-        color: 'blue'
+const styles = StyleSheet.create({
+  default: {
+    color: "blue",
+    cursor: "pointer",
+    "@media (max-width: 900px)": {
+      fontSize: "20px",
+      borderBottom: "2px solid black",
+      listStyle: "none",
+      width: "100%",
+      padding: "10px 8px",
     },
-    urgent: {
-        color: 'red'
+  },
+
+  urgent: {
+    color: "red",
+    cursor: "pointer",
+    "@media (max-width: 900px)": {
+      fontSize: "20px",
+      borderBottom: "2px solid black",
+      listStyle: "none",
+      width: "100%",
+      padding: "10px 8px",
     },
-    small: {
-        '@media (max-width: 900px)': {
-            padding: '10px 8px',
-            fontSize: 20,
-            listStyle: 'none',
-            borderBottom: 'solid black 1px'
-        }
-    }
-  });
+  },
+});
 
-  // Conditionally apply styles based on the type prop
-  const listItemStyles = type === 'urgent' ? styles.urgent : styles.default;
-  const style = css(listItemStyles, styles.small);
-
+function NotificationItem({ type, html, value, markAsRead, id }) {
+  const style = type === "urgent" ? styles.urgent : styles.default;
   return (
-    <li
-      className={style}
-      data-notification-type={type}
-      dangerouslySetInnerHTML={html}
-      onClick={() => markAsRead(id)}
-    >
-      {value}
-    </li>
+    <>
+      <li className={css(style)} data-notification-type={type} onClick={() => markAsRead(id)}>
+        {html ? (
+          <span dangerouslySetInnerHTML={html} />
+        ) : value}
+      </li>
+    </>
   );
-};
+}
+
 
 NotificationItem.propTypes = {
-  id: PropTypes.number.isRequired,
+  type: PropTypes.string.isRequired,
+  html: PropTypes.shape({ __html: PropTypes.string }),
   value: PropTypes.string,
-  type: PropTypes.string,
-  html: PropTypes.shape({
-    __html: PropTypes.string,
-  }),
   markAsRead: PropTypes.func,
+  id: PropTypes.number,
 };
 
 NotificationItem.defaultProps = {
-  type: 'default',
-  html: null,
-  markAsRead: () => {},
+  markAsRead: () => {}
 };
 
 export default React.memo(NotificationItem);
